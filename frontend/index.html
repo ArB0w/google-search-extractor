@@ -1,0 +1,45 @@
+```html
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Google Search Extractor</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Google Search Extractor</h1>
+
+        <div class="search-area">
+            <input type="text" id="query" placeholder="Zadejte klíčové slovo nebo slovní spojení..." autocomplete="off">
+
+            <button id="searchBtn" onclick="runSearch()">
+                Hledat
+            </button>
+        </div>
+
+        <div id="status"></div>
+
+        <div id="actionsArea">
+            <button id="exportBtn" onclick="downloadJSON()" disabled>
+                Exportovat JSON
+            </button>
+        </div>
+
+        <div id="results"></div>
+
+    </div>
+
+
+</body>
+
+</html>
+```
