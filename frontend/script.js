@@ -1,6 +1,6 @@
 let extractedData = null;
 
-async function runSearch() {
+export async function runSearch() {
   const queryInput = document.getElementById("query").value.trim();
   const statusDiv = document.getElementById("status");
   const resultsDiv = document.getElementById("results");
@@ -66,7 +66,7 @@ async function runSearch() {
 /**
  * Zobrazí výsledky vyhledávání jako strukturované položky.
  */
-function displayResults(results) {
+export function displayResults(results) {
   const resultsDiv = document.getElementById("results");
 
   resultsDiv.innerHTML = "";
@@ -178,11 +178,17 @@ function updateExportButton() {
 
 // Inicializace tlačítka po načtení stránky
 
-document.addEventListener("DOMContentLoaded", () => {
-  const queryInput = document.getElementById("query");
+if (typeof document !== "undefined") {
+  document.addEventListener("DOMContentLoaded", () => {
+    document
+      .getElementById("query")
+      .addEventListener("input", updateSearchButton);
+    document.getElementById("searchBtn").addEventListener("click", runSearch);
+    document
+      .getElementById("exportBtn")
+      .addEventListener("click", downloadJSON);
 
-  queryInput.addEventListener("input", updateSearchButton);
-
-  updateSearchButton();
-  updateExportButton();
-});
+    updateSearchButton();
+    updateExportButton();
+  });
+}

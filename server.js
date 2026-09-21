@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import { transformResults, callAPI } from "./backend/utility.js";
+import { search } from "./backend/api.js";
 
 dotenv.config();
 
@@ -11,29 +11,36 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static("frontend"));
 
 // API endpoint pro vyhledávání
+import crypto from "node:crypto";
+
 app.get("/api/search", async (req, res) => {
-  try {
-    const query = req.query.q;
+  const requestId = crypto.randomUUID();
+  const startTime = Date.now();
 
-    if (!query) {
-      throw new Error(`SerpApi return HTTP ${response.status}`);
-      return res.status(400).json({
-        error: "Missing qwuarry.",
-      });
-    }
+  const query = req.query.q;
 
-    const data = await callAPI(query, process.env.SERPAPI_KEY);
+  const clientIP =
+    req.headers["x-forwarded-for"]?.split(",")[0] || req.socket.remoteAddress;
 
-    const results = transformResults(data.organic_results || []);
+  console.log(
+    `[${new Date().toISOString()}] ` +
+      `[${requestId}] ` +
+      `Search request | IP: ${clientIP} | Query: "${query}"`,
+  );
 
-    res.json(results);
-  } catch (error) {
-    console.error("Errorr in search:", error);
+  const result = await search(query, process.env.SERPAPI_KEY);
 
-    res.status(500).json({
-      error: "Error in searchning.",
-    });
-  }
+  const duration = Date.now() - startTime;
+
+  console.log(
+    `[${new Date().toISOString()}] ` +
+      `[${requestId}] ` +
+      `Search response | Status: ${result.status} | ` +
+      `Results: ${Array.isArray(result.data) ? result.data.length : 0} | ` +
+      `Time: ${duration} ms`,
+  );
+
+  res.status(result.status).json(result.data);
 });
 
 app.listen(PORT, () => {
