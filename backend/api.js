@@ -1,3 +1,5 @@
+import crypto from "node:crypto";
+
 export function transformResults(results) {
   return [...results]
     .map((item) => ({
@@ -54,4 +56,38 @@ export async function search(query, API_KEY) {
       },
     };
   }
+}
+
+export async function handleSearch(req, res, logging = true) {
+  const requestId = crypto.randomUUID();
+  const startTime = Date.now();
+
+  const query = req.query.q;
+
+  const clientIP =
+    req.headers["x-forwarded-for"]?.split(",")[0] || req.socket.remoteAddress;
+
+  if (logging) {
+    console.log(
+      `[${new Date().toISOString()}] ` +
+        `[${requestId}] ` +
+        `Search request | IP: ${clientIP} | Query: "${query}"`,
+    );
+  }
+
+  const result = await search(query, process.env.SERPAPI_KEY);
+
+  const duration = Date.now() - startTime;
+
+  if (logging) {
+    console.log(
+      `[${new Date().toISOString()}] ` +
+        `[${requestId}] ` +
+        `Search response | Status: ${result.status} | ` +
+        `Results: ${Array.isArray(result.data) ? result.data.length : 0} | ` +
+        `Time: ${duration} ms`,
+    );
+  }
+
+  res.status(result.status).json(result.data);
 }
