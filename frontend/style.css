@@ -1,144 +1,144 @@
- * {
-     box-sizing: border-box;
- }
+/* Global box sizing */
+* {
+    box-sizing: border-box;
+}
 
- body {
-     margin: 0;
-     padding: 40px 20px;
-     font-family: Arial, sans-serif;
-     background-color: #f5f5f5;
-     color: #222;
- }
+/* Page layout and typography */
+body {
+    margin: 0;
+    padding: 40px 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #222;
+}
 
- .container {
-     max-width: 1000px;
-     margin: 0 auto;
- }
+/* Main content container */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
 
- h1 {
-     margin-bottom: 25px;
- }
+/* Search form */
+.search-area {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
 
- .search-area {
-     display: flex;
-     gap: 10px;
-     margin-bottom: 15px;
- }
+/* Search input */
+#query {
+    flex: 1;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
 
- #query {
-     flex: 1;
-     padding: 12px;
-     font-size: 16px;
-     border: 1px solid #ccc;
-     border-radius: 5px;
- }
+/* Buttons */
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    cursor: pointer;
+}
 
- button {
-     padding: 12px 20px;
-     border: none;
-     border-radius: 5px;
-     font-size: 15px;
-     cursor: pointer;
- }
+/* Search button */
+#searchBtn {
+    background-color: #4285f4;
+    color: white;
+}
 
- #searchBtn {
-     background-color: #4285f4;
-     color: white;
- }
+#searchBtn:hover {
+    background-color: #3367d6;
+}
 
- #searchBtn:hover {
-     background-color: #3367d6;
- }
+#searchBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
 
- #searchBtn:disabled {
-     opacity: 0.6;
-     cursor: not-allowed;
- }
+/* Search status */
+#status {
+    margin: 15px 0;
+    min-height: 20px;
+}
 
- #status {
-     margin: 15px 0;
-     min-height: 20px;
- }
+/* Export section */
+#actionsArea {
+    margin: 15px 0;
+}
 
- #actionsArea {
-     margin: 15px 0;
- }
+#exportBtn {
+    background-color: #add8e6;
+    color: #222;
+}
 
- #exportBtn {
-     background-color: #add8e6;
-     color: #222;
- }
+#exportBtn:not(:disabled):hover {
+    opacity: 0.85;
+}
 
- #exportBtn:not(:disabled):hover {
-     opacity: 0.85;
- }
+#exportBtn:disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
+}
 
- #exportBtn:disabled {
-     cursor: not-allowed;
-     opacity: 0.8;
- }
+/* Search results */
+#results {
+    margin-top: 25px;
+}
 
- #results {
-     margin-top: 25px;
- }
+#results h2 {
+    margin-bottom: 20px;
+}
 
- #results h2 {
-     margin-bottom: 20px;
- }
+.search-result {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
 
- .search-result {
-     background-color: white;
-     border: 1px solid #ddd;
-     border-radius: 6px;
-     padding: 20px;
-     margin-bottom: 15px;
- }
+/* Result title and URL */
+.result-title {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
 
- .result-title {
-     font-size: 18px;
-     margin-bottom: 8px;
- }
+.result-title strong {
+    margin-right: 5px;
+}
 
- .result-title strong {
-     margin-right: 5px;
- }
+.result-title a {
+    color: #1a0dab;
+    text-decoration: none;
+}
 
- .result-title a {
-     color: #1a0dab;
-     text-decoration: none;
- }
+.result-title a:hover {
+    text-decoration: underline;
+}
 
- .result-title a:hover {
-     text-decoration: underline;
- }
+.result-url {
+    color: #188038;
+    font-size: 14px;
+    margin-bottom: 10px;
+    word-break: break-all;
+}
 
- .result-url {
-     color: #188038;
-     font-size: 14px;
-     margin-bottom: 10px;
-     word-break: break-all;
- }
+/* Result description */
+.search-result p {
+    margin: 8px 0 15px;
+    line-height: 1.5;
+}
 
- .search-result p {
-     margin: 8px 0 15px;
-     line-height: 1.5;
- }
+/* Responsive layout */
+@media (max-width: 600px) {
+    .search-area {
+        flex-direction: column;
+    }
 
- .structured-data {
-     background-color: #f0f0f0;
-     padding: 15px;
-     border-radius: 5px;
-     overflow-x: auto;
-     font-size: 13px;
-     line-height: 1.5;
- }
-
- @media (max-width: 600px) {
-     .search-area {
-         flex-direction: column;
-     }
-
-     #searchBtn {
-         width: 100%;
-     }
- }
+    #searchBtn {
+        width: 100%;
+    }
+}
