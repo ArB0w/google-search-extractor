@@ -27,20 +27,18 @@ The application is built with:
 
 ## Architecture
 
-The application consists of a frontend, a Node.js server and an external SerpApi service.
+The application is built around a **Node.js server using Express**, which acts as an intermediary between the client and the external SerpApi service.
 
-The communication flow is:
+The Express server has two main responsibilities:
 
-1. The server serves the frontend files to the client.
-2. The user enters a search query in the frontend.
-3. The frontend sends the query to the server through the `/api/search` endpoint.
-4. The server receives the request and forwards the query to SerpApi.
-5. SerpApi performs the Google search and returns structured search data to the server.
-6. The server extracts the organic results and transforms them into the application's required format.
-7. The transformed data is returned to the frontend.
-8. The frontend displays the results and allows them to be exported as a JSON file.
+- serving the frontend files to the client,
+- processing search requests and communicating with SerpApi.
 
-The SerpApi API key is stored in an environment variable and is therefore not exposed to the client.
+The frontend is served directly by the Express server. When the client submits a search query, the request is sent to the Express server through the `/api/search` endpoint. The server then forwards the query to SerpApi using the API key stored in an environment variable.
+
+SerpApi returns the Google Search data to the server, where the relevant organic results are extracted and transformed into the format required by the application. The server then returns the processed data to the client.
+
+This architecture keeps the SerpApi API key on the server side and prevents it from being exposed to the client or included in the frontend source code.
 
 ## Project Structure
 
