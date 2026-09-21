@@ -12,16 +12,16 @@ app.use(express.static("frontend"));
 
 // API endpoint pro vyhledávání
 app.get("/api/search", async (req, res) => {
-  console.log(req.query.q);
-  const query = req.query.q;
-
-  if (!query) {
-    return res.status(400).json({
-      error: "Missing qwuarry.",
-    });
-  }
-
   try {
+    const query = req.query.q;
+
+    if (!query) {
+      throw new Error(`SerpApi return HTTP ${response.status}`);
+      return res.status(400).json({
+        error: "Missing qwuarry.",
+      });
+    }
+
     const data = await callAPI(query, process.env.SERPAPI_KEY);
 
     const results = transformResults(data.organic_results || []);

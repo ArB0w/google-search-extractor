@@ -9,7 +9,6 @@ async function runSearch() {
   const exportBtn = document.getElementById("exportBtn");
 
   if (!queryInput) {
-    alert("Prosím, zadejte klíčové slovo.");
     return;
   }
 
@@ -61,31 +60,6 @@ async function runSearch() {
     updateExportButton();
   } finally {
     searchBtn.disabled = false;
-  }
-}
-
-/**
- * Aktualizuje stav tlačítka Exportovat.
- */
-function updateExportButton() {
-  const exportBtn = document.getElementById("exportBtn");
-
-  if (!exportBtn) {
-    return;
-  }
-
-  if (extractedData === null) {
-    // Data nejsou dostupná
-    exportBtn.disabled = true;
-    exportBtn.style.backgroundColor = "#add8e6";
-    exportBtn.style.cursor = "not-allowed";
-    exportBtn.style.opacity = "0.8";
-  } else {
-    // Data jsou připravena k exportu
-    exportBtn.disabled = false;
-    exportBtn.style.backgroundColor = "";
-    exportBtn.style.cursor = "pointer";
-    exportBtn.style.opacity = "1";
   }
 }
 
@@ -170,7 +144,45 @@ function downloadJSON() {
   URL.revokeObjectURL(url);
 }
 
+function updateSearchButton() {
+  const query = document.getElementById("query").value.trim();
+  const searchBtn = document.getElementById("searchBtn");
+
+  searchBtn.disabled = query === "";
+}
+
+/**
+ * Aktualizuje stav tlačítka Exportovat.
+ */
+function updateExportButton() {
+  const exportBtn = document.getElementById("exportBtn");
+
+  if (!exportBtn) {
+    return;
+  }
+
+  if (extractedData === null) {
+    // Data nejsou dostupná
+    exportBtn.disabled = true;
+    exportBtn.style.backgroundColor = "#add8e6";
+    exportBtn.style.cursor = "not-allowed";
+    exportBtn.style.opacity = "0.8";
+  } else {
+    // Data jsou připravena k exportu
+    exportBtn.disabled = false;
+    exportBtn.style.backgroundColor = "";
+    exportBtn.style.cursor = "pointer";
+    exportBtn.style.opacity = "1";
+  }
+}
+
 // Inicializace tlačítka po načtení stránky
+
 document.addEventListener("DOMContentLoaded", () => {
+  const queryInput = document.getElementById("query");
+
+  queryInput.addEventListener("input", updateSearchButton);
+
+  updateSearchButton();
   updateExportButton();
 });
