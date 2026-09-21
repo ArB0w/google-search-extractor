@@ -376,7 +376,7 @@ The application uses SerpApi to access Google Search results.
 
 SerpApi provides structured JSON responses, which makes it possible to process the search results without parsing Google's HTML pages directly.
 
-The application currently relies on the SerpApi Free plan. According to the current SerpApi pricing, the Free plan provides a limited number of searches per month and also has an hourly search limit.
+The application currently relies on the SerpApi Free plan. According to the current SerpApi pricing, the Free plan provides a limited number of searches per month and also has an hourly search limit (250 searches per month, 50 searches per hour).
 
 Because each search consumes API quota, the application is primarily intended for demonstration, testing and development rather than high-volume usage.
 
