@@ -222,15 +222,19 @@ function updateExportButton() {
 }
 
 /**
- * Initialize button event handlers after the page is loaded.
+ * Initialize event handlers after the page is loaded.
  */
 if (typeof document !== "undefined") {
   document.addEventListener("DOMContentLoaded", () => {
-    document
-      .getElementById("query")
-      .addEventListener("input", updateSearchButton);
+    const queryInput = document.getElementById("query");
+    const searchForm = document.getElementById("searchForm");
 
-    document.getElementById("searchBtn").addEventListener("click", runSearch);
+    queryInput.addEventListener("input", updateSearchButton);
+
+    searchForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      runSearch();
+    });
 
     document
       .getElementById("exportBtn")
