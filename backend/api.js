@@ -36,6 +36,8 @@ export async function callAPI(query, API_KEY) {
   url.searchParams.set("engine", "google");
   url.searchParams.set("q", query);
   url.searchParams.set("api_key", API_KEY);
+  url.searchParams.set("hl", "cs");
+  url.searchParams.set("gl", "cz");
 
   // Send the request to SerpApi
   const response = await fetch(url);
