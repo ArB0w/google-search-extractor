@@ -1,6 +1,6 @@
 # Google Search Extractor
 
-A simple web application for extracting organic Google Search results and displaying them in a structured format.
+A simple web application for extracting organic Google Search results into JSON and displaying them in a structured format.
 
 ## Features
 
