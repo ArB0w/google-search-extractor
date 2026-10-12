@@ -130,31 +130,46 @@ else
     echo "Skipping dependency installation, tests and Docker build."
 fi
 
-# Ask before staging changes.
+
+# Display changed files and ask before staging.
 echo
-read -r -p "Stage changes and review them? [y/N] " answer
+echo "Changed files:"
+git status --short
+
+echo
+read -r -p "Stage all changes? [y/N] " answer
 
 if [[ ! "$answer" =~ ^[Yy]$ ]]; then
-    echo "Pipeline stopped before staging."
+    echo "Staging skipped."
     exit 0
 fi
 
 # Stage changes while respecting .gitignore.
 git add -A
 
-echo
-echo "Staged change summary:"
-git diff --cached --stat
-
 if git diff --cached --quiet; then
-    echo "No staged changes to commit."
+    echo "No staged changes to review."
     exit 0
 fi
 
-# Display the exact changes before committing.
+# Display the staged file summary.
 echo
-echo "Staged changes:"
-git diff --cached
+echo "Staged files:"
+git diff --cached --name-status
+
+# Ask whether to review the staged diff.
+echo
+read -r -p "Review staged changes in detail? [y/N] " answer
+
+if [[ "$answer" =~ ^[Yy]$ ]]; then
+    echo
+    echo "Controls: Space = next page, b = previous page, q = quit."
+    echo
+    git diff --cached
+else
+    echo "Detailed review skipped."
+fi
+
 
 read -r -p "Commit and push to '$CURRENT_BRANCH'? [y/N] " answer
 
@@ -171,19 +186,38 @@ echo
 echo "Pushing to origin/$CURRENT_BRANCH..."
 git push -u origin "$CURRENT_BRANCH"
 
-# Update the development environment only when application files changed.
+
+
+# Ask whether to deploy the application if application files changed.
 if [[ "$APP_CHANGED" == true ]]; then
     echo
-    echo "Updating Docker Compose environment..."
-    docker compose up -d
+    read -r -p "Deploy application using Docker Compose? [y/N] " answer
 
+    if [[ "$answer" =~ ^[Yy]$ ]]; then
+        echo
+        echo "Deploying application..."
+        docker compose up -d
+    else
+        echo
+        echo "Deployment skipped."
+    fi
+else
+    echo
+    echo "No application changes detected. Deployment skipped."
+fi
+
+# Display container status if any containers are running.
+RUNNING_CONTAINERS="$(docker compose ps --status running -q)"
+
+if [[ -n "$RUNNING_CONTAINERS" ]]; then
     echo
     echo "Container status:"
     docker compose ps
-else
+
     echo
-    echo "Documentation-only changes. The running application remains unchanged."
+    echo "To stop the application, run: docker compose down"
 fi
 
 echo
 echo "Pipeline completed successfully."
+

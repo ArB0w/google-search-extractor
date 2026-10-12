@@ -150,6 +150,12 @@ The project also includes Docker configuration for running the application in a 
 docker compose up --build
 ```
 
+Aad to put it down.
+
+```bash
+docker compose down
+```
+
 The repository contains the files required to build the Docker image, but the built image itself is not included.
 
 ---
