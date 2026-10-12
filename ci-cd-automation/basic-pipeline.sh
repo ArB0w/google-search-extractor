@@ -1,4 +1,3 @@
-
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
@@ -50,10 +49,22 @@ if [[ ! -f "docker-compose.yml" && ! -f "compose.yml" && ! -f "compose.yaml" ]];
     exit 1
 fi
 
-# Prevent accidentally committing the .env file containing secrets.
+# Check that .env is not tracked by Git and is ignored.
 if git ls-files --error-unmatch .env >/dev/null 2>&1; then
     echo "Error: .env is tracked by Git."
-    echo "Remove it from version control and add it to .gitignore."
+    echo "Remove it from version control before continuing."
+    exit 1
+fi
+
+if ! git check-ignore -q -- .env; then
+    echo "Error: .env is not ignored by Git."
+    echo "Add .env to .gitignore before continuing."
+    exit 1
+fi
+
+# Check that the repository has a remote for pushing.
+if ! git remote get-url origin >/dev/null 2>&1; then
+    echo "Error: Git remote 'origin' is not configured."
     exit 1
 fi
 
@@ -130,7 +141,6 @@ else
     echo "Skipping dependency installation, tests and Docker build."
 fi
 
-
 # Display changed files and ask before staging.
 echo
 echo "Changed files:"
@@ -148,7 +158,7 @@ fi
 git add -A
 
 if git diff --cached --quiet; then
-    echo "No staged changes to review."
+    echo "No staged changes to commit."
     exit 0
 fi
 
@@ -157,7 +167,7 @@ echo
 echo "Staged files:"
 git diff --cached --name-status
 
-# Ask whether to review the staged diff.
+# Ask whether to review the staged diff in detail.
 echo
 read -r -p "Review staged changes in detail? [y/N] " answer
 
@@ -170,7 +180,8 @@ else
     echo "Detailed review skipped."
 fi
 
-
+# Ask for confirmation before committing and pushing.
+echo
 read -r -p "Commit and push to '$CURRENT_BRANCH'? [y/N] " answer
 
 if [[ ! "$answer" =~ ^[Yy]$ ]]; then
@@ -185,8 +196,6 @@ git commit -m "$COMMIT_MESSAGE"
 echo
 echo "Pushing to origin/$CURRENT_BRANCH..."
 git push -u origin "$CURRENT_BRANCH"
-
-
 
 # Ask whether to deploy the application if application files changed.
 if [[ "$APP_CHANGED" == true ]]; then
@@ -216,8 +225,10 @@ if [[ -n "$RUNNING_CONTAINERS" ]]; then
 
     echo
     echo "To stop the application, run: docker compose down"
+else
+    echo
+    echo "No running containers."
 fi
 
 echo
 echo "Pipeline completed successfully."
-
