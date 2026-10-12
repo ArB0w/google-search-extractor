@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: google-search-extractor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: google-search-extractor
+  template:
+    metadata:
+      labels:
+        app: google-search-extractor
+    spec:
+      containers:
+        - name: app
+          image: TODO_REGISTRY/google-search-extractor:1.0.0
+          ports:
+            - name: http
+              containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: google-search-extractor-config
+          env:
+            - name: SERPAPI_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: google-search-extractor-secret
+                  key: SERPAPI_KEY
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20

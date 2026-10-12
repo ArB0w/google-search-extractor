@@ -18,6 +18,10 @@ app.get("/api/search", async (req, res) => {
   await handleSearch(req, res, true);
 });
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server běží na http://localhost:${PORT}`);
